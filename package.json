@@ -1,0 +1,29 @@
+{
+  "name": "defi-arbitrage-bot",
+  "version": "1.0.0",
+  "description": "DeFi 套利机器人 - 实时监控多DEX价格，发现套利机会",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "defi",
+    "arbitrage",
+    "uniswap",
+    "trading-bot",
+    "cryptocurrency"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.10.0",
+    "node-telegram-bot-api": "^0.64.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

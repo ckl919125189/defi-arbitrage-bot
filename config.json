@@ -1,0 +1,54 @@
+{
+  "networks": [
+    {
+      "name": "ethereum",
+      "chainId": 1,
+      "rpc": "https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY",
+      "gasTracker": "https://api.etherscan.io/api?module=gastracker&action=gasoracle"
+    },
+    {
+      "name": "arbitrum",
+      "chainId": 42161,
+      "rpc": "https://arb-mainnet.g.alchemy.com/v2/YOUR_KEY"
+    },
+    {
+      "name": "polygon",
+      "chainId": 137,
+      "rpc": "https://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY"
+    }
+  ],
+  "dexes": [
+    {
+      "name": "uniswap",
+      "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+      "router": "0xE592427A0AEce92De3Edee1F18E0157C05861564"
+    },
+    {
+      "name": "sushiswap",
+      "factory": "0xC0AEe478e3658e2610c5F7A4A2E1777cE9cb4F17",
+      "router": "0xd9e1cE17f2641f24aE83637bd66A2cDuAC8D8F2"
+    }
+  ],
+  "tokens": {
+    "WETH": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "USDC": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "USDT": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "DAI": "0x6B175474E89094C44Da98b954EedcCBfD9E5bFa3",
+    "WBTC": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
+  },
+  "monitor": {
+    "interval": 5000,
+    "minProfitUSD": 10,
+    "gasPriceMultiplier": 1.2
+  },
+  "alerts": {
+    "telegram": {
+      "enabled": false,
+      "botToken": "",
+      "chatId": ""
+    },
+    "console": {
+      "enabled": true
+    }
+  }
+}
