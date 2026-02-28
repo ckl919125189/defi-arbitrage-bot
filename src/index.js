@@ -19,6 +19,7 @@ try {
 const UniswapAdapter = require('./dex/uniswap');
 const SushiSwapAdapter = require('./dex/sushiswap');
 const BinanceAdapter = require('./dex/binance');
+const OKXAdapter = require('./dex/okx');
 const EnhancedPriceMonitor = require('./monitor/enhancedMonitor');
 const AlertService = require('./alert/alertService');
 const { calculateArbitrageProfit, getGasPriceUSD } = require('./utils/helpers');
@@ -33,6 +34,9 @@ const dexAdapters = [];
 
 // 添加 Binance 作为价格源
 dexAdapters.push(new BinanceAdapter({ name: 'Binance' }));
+
+// 添加 OKX 作为价格源
+dexAdapters.push(new OKXAdapter({ name: 'OKX' }));
 
 if (config.dexes) {
   for (const dexConfig of config.dexes) {
