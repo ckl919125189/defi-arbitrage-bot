@@ -2,18 +2,20 @@
  * 价格监控器
  */
 class PriceMonitor {
-  constructor(dexAdapters, config) {
+  constructor(dexAdapters, config, alertService = null) {
     this.dexAdapters = dexAdapters;
     this.config = config;
+    this.alertService = alertService;
     this.prices = {};
     this.interval = null;
+    this.arbitrageHistory = [];
   }
 
   /**
    * 开始监控
    */
   start() {
-    console.log('🔄 价格监控已启动');
+    console.log('🔄 价格监控已启动\n');
     this.fetchPrices();
     this.interval = setInterval(() => {
       this.fetchPrices();
@@ -27,7 +29,7 @@ class PriceMonitor {
     if (this.interval) {
       clearInterval(this.interval);
       this.interval = null;
-      console.log('🛑 价格监控已停止');
+      console.log('\n🛑 价格监控已停止');
     }
   }
 
@@ -50,7 +52,7 @@ class PriceMonitor {
             this.prices[token][dex.name] = price;
           }
         } catch (error) {
-          console.error(`[Monitor] ${dex.name} 获取 ${token} 价格失败`);
+          // 静默处理错误
         }
       }
     }
@@ -91,37 +93,37 @@ class PriceMonitor {
       const priceDiff = maxPrice - minPrice;
       const priceDiffPercent = (priceDiff / minPrice) * 100;
       
-      if (priceDiffPercent > 0.5) { // 超过 0.5% 算套利机会
-        console.log('\n🎯 套利机会！');
-        console.log(`   代币: ${token}`);
-        console.log(`   最低价: ${minDex} $${minPrice.toFixed(4)}`);
-        console.log(`   最高价: ${maxDex} $${maxPrice.toFixed(4)}`);
-        console.log(`   价差: $${priceDiff.toFixed(2)} (${priceDiffPercent.toFixed(2)}%)`);
+      // 检查是否满足最小价差
+      if (priceDiffPercent > 0.3) { // 超过 0.3% 算套利机会
+        // 计算预估利润（假设交易 1000 USD）
+        const volume = 1000;
+        const gasCost = 5; // 预估 Gas 成本
+        const profit = calculateProfit(minPrice, maxPrice, volume, gasCost);
         
-        // 检查是否满足最小利润
-        const estimatedProfit = priceDiff * 1000; // 假设交易 1000 代币
-        if (estimatedProfit > this.config.monitor.minProfitUSD) {
-          this.sendAlert(token, minDex, maxDex, minPrice, maxPrice, priceDiffPercent, estimatedProfit);
+        if (profit.isProfitable) {
+          const opportunity = {
+            token,
+            buyDex: minDex,
+            sellDex: maxDex,
+            buyPrice: minPrice,
+            sellPrice: maxPrice,
+            priceDiff,
+            priceDiffPercent,
+            volume,
+            gasCost,
+            ...profit,
+            timestamp: Date.now()
+          };
+          
+          this.arbitrageHistory.push(opportunity);
+          
+          // 发送提醒
+          if (this.alertService) {
+            this.alertService.sendArbitrageAlert(opportunity);
+          }
         }
       }
     }
-  }
-
-  /**
-   * 发送提醒
-   */
-  sendAlert(token, buyDex, sellDex, buyPrice, sellPrice, percent, profit) {
-    const message = `
-🎯 *套利机会发现！*
-
-*代币:* ${token}
-*买入:* ${buyDex} @ $${buyPrice.toFixed(4)}
-*卖出:* ${sellDex} @ $${sellPrice.toFixed(4)}
-*价差:* ${percent.toFixed(2)}%
-*预估利润:* $${profit.toFixed(2)}
-    `.trim();
-
-    console.log('\n' + message);
   }
 
   /**
@@ -130,6 +132,38 @@ class PriceMonitor {
   getPrices() {
     return this.prices;
   }
+
+  /**
+   * 获取套利历史
+   */
+  getHistory() {
+    return this.arbitrageHistory;
+  }
+
+  /**
+   * 清除历史
+   */
+  clearHistory() {
+    this.arbitrageHistory = [];
+  }
+}
+
+/**
+ * 计算利润
+ */
+function calculateProfit(buyPrice, sellPrice, volume, gasCostUSD) {
+  const buyAmount = volume / buyPrice;
+  const sellRevenue = buyAmount * sellPrice;
+  const profit = sellRevenue - volume - gasCostUSD;
+  const profitPercent = ((sellRevenue - volume) / volume) * 100;
+  
+  return {
+    profitUSD: profit,
+    profitPercent,
+    sellRevenue,
+    gasCost: gasCostUSD,
+    isProfitable: profit > 0
+  };
 }
 
 module.exports = PriceMonitor;
