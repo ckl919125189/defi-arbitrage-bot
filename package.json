@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "jest"
+    "test": "node tests/bot.test.js && node tests/advanced.test.js"
   },
   "keywords": [
     "defi",
