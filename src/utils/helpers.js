@@ -8,9 +8,9 @@ const ethers = require('ethers');
  */
 async function getGasPriceUSD(network = 'ethereum') {
   const gasPrices = {
-    ethereum: { fast: 30, normal: 20, slow: 10 }, // Gwei
+    ethereum: { fast: 30, normal: 20, slow: 10 },
     arbitrum: { fast: 0.1, normal: 0.05, slow: 0.01 },
-    polygon: fast: 50, normal: 30, slow: 20
+    polygon: { fast: 50, normal: 30, slow: 20 }
   };
   
   const prices = gasPrices[network] || gasPrices.ethereum;
