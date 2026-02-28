@@ -31,6 +31,9 @@ let startTime = Date.now();
 // 初始化 DEX 适配器
 const dexAdapters = [];
 
+// 添加 Binance 作为价格源
+dexAdapters.push(new BinanceAdapter({ name: 'Binance' }));
+
 if (config.dexes) {
   for (const dexConfig of config.dexes) {
     if (dexConfig.name === 'uniswap') {
@@ -46,7 +49,7 @@ alertService = new AlertService(config.alerts);
 
 console.log(`
 ╔════════════════════════════════════════╗
-║     🤖 DeFi 套利机器人 v1.0          ║
+║     🤖 DeFi 套利机器人 v1.2          ║
 ╠════════════════════════════════════════╣
 ║  监控 DEX: ${dexAdapters.map(d => d.name).join(', ').padEnd(26)}║
 ║  监控代币: ${Object.keys(config.tokens).join(', ').padEnd(26)}║
