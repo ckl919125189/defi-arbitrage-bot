@@ -173,7 +173,8 @@ defi-arbitrage-bot/
 |-----|------|------|
 | Uniswap V3 | Ethereum, Arbitrum, Optimism | ✅ |
 | SushiSwap | Multi-chain | ✅ |
-| Curve | Ethereum | 🔜 |
+| Curve | Ethereum | ✅ |
+| Balancer | Ethereum | ✅ |
 
 ## 💰 收入方式
 
@@ -189,11 +190,12 @@ defi-arbitrage-bot/
 
 ## 🔜 后续功能
 
-- [ ] 自动交易执行
-- [ ] 三角套利
-- [ ] 更多 DEX 支持 (Curve, Balancer)
+- [x] 自动交易执行
+- [x] 三角套利
+- [x] 更多 DEX 支持 (Curve, Balancer)
 - [ ] Web 仪表盘
 - [ ] 历史数据分析
+- [ ] MEV 保护
 
 ## 🤝 贡献
 
