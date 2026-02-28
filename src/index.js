@@ -18,7 +18,8 @@ try {
 // 导入模块
 const UniswapAdapter = require('./dex/uniswap');
 const SushiSwapAdapter = require('./dex/sushiswap');
-const PriceMonitor = require('./monitor/priceMonitor');
+const BinanceAdapter = require('./dex/binance');
+const EnhancedPriceMonitor = require('./monitor/enhancedMonitor');
 const AlertService = require('./alert/alertService');
 const { calculateArbitrageProfit, getGasPriceUSD } = require('./utils/helpers');
 
@@ -54,8 +55,8 @@ console.log(`
 ╚════════════════════════════════════════╝
 `);
 
-// 创建价格监控器
-monitor = new PriceMonitor(dexAdapters, config, alertService);
+// 创建增强版价格监控器
+monitor = new EnhancedPriceMonitor(dexAdapters, config, alertService);
 
 // 启动
 monitor.start();
